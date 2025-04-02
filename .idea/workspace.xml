@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f8ae7767-0d53-4a95-b254-c694bf1f32a3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/ApplicationRunner.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/annotation/CommandTypeMapping.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/configuration/RedisConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/configuration/WebSocketConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/controller/ChatController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/dto/CreateChatRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/dto/MessageDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/dto/MessageTransfer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/dto/UserDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/entity/Attachment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/entity/BaseEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/entity/Chat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/entity/ChatParticipant.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/entity/ChatParticipantId.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/entity/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/entity/MessageStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/entity/MessageStatusesId.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/enums/CommandType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/repository/ChatParticipantRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/repository/ChatRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/repository/MessageRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/repository/MessageStatusRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/command/AddUserToChatCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/command/Command.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/command/CommandExecutor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/command/CreateChatCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/command/GetMessagesCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/command/MarkAsReadCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/command/SendMessageCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/message/MessageCacheService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/message/MessageService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/websocket/WebSocketEventListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/websocket/WebSocketEventPublisher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/websocket/WebSocketHandlerImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/db/exchange/20250330_create_table_attachments.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/db/exchange/20250330_create_table_chat_participants.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/db/exchange/20250330_create_table_chats.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/db/exchange/20250330_create_table_message_statuses.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/db/exchange/20250330_create_table_messages.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/db/master.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="AnnotationType" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2v24yinBkkkqwIYc79zmBxRaORm" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
+    "Maven.Notification [clean,install].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.ApplicationRunner.executor": "Run",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/media/mikhail/KINGSTON/apps/microcerviceForProject/Notification/src/main/proto",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.runner",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/proto" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ApplicationRunner" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="Notification" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.pushkarev.notification.ApplicationRunner" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.pushkarev.notification.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.ApplicationRunner" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f8ae7767-0d53-4a95-b254-c694bf1f32a3" name="Changes" comment="" />
+      <created>1743330095824</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1743330095824</updated>
+      <workItem from="1743330097039" duration="1168000" />
+      <workItem from="1743346701566" duration="46000" />
+      <workItem from="1743346758196" duration="44000" />
+      <workItem from="1743346823330" duration="25000" />
+      <workItem from="1743347008356" duration="289000" />
+      <workItem from="1743347320452" duration="190000" />
+      <workItem from="1743347516516" duration="11000" />
+      <workItem from="1743347540784" duration="160000" />
+      <workItem from="1743347716422" duration="5311000" />
+      <workItem from="1743421755032" duration="4619000" />
+      <workItem from="1743426665964" duration="5942000" />
+      <workItem from="1743439689000" duration="2551000" />
+      <workItem from="1743516197829" duration="1087000" />
+      <workItem from="1743528640323" duration="5870000" />
+      <workItem from="1743594607754" duration="6767000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/entity/ChatParticipantId.java</url>
+          <line>7</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/message/MessageService.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/message/MessageCacheService.java</url>
+          <line>42</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/message/MessageCacheService.java</url>
+          <line>49</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/pushkarev/notification/service/message/MessageCacheService.java</url>
+          <line>52</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

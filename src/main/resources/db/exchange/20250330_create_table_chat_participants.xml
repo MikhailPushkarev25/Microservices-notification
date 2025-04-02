@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="4" author="MPushkarev">
+
+        <preConditions>
+            <not>
+                <tableExists schemaName="microservices" tableName="chat_participants"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="microservices" tableName="chat_participants">
+            <column name="chat_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="joined_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <addPrimaryKey columnNames="chat_id, user_id"
+                       constraintName="pk_chat_participants"
+                       tableName="chat_participants"
+                       schemaName="microservices"/>
+
+        <addForeignKeyConstraint baseTableName="chat_participants"
+                                 baseColumnNames="chat_id"
+                                 constraintName="fk_chat_participants_chat"
+                                 referencedTableName="chats"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
