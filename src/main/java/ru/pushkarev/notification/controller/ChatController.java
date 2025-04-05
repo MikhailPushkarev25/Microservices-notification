@@ -2,6 +2,7 @@ package ru.pushkarev.notification.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.pushkarev.notification.dto.ChatsDto;
 import ru.pushkarev.notification.dto.CreateChatRequest;
 import ru.pushkarev.notification.dto.UserDto;
 import ru.pushkarev.notification.entity.Message;
@@ -18,6 +19,11 @@ public class ChatController {
 
     public ChatController(CommandExecutor executor) {
         this.executor = executor;
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<ChatsDto>> chats() {
+        return ResponseEntity.ok(executor.executeCommand(CommandType.CHATS, null));
     }
 
     @PostMapping("/create")

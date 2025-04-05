@@ -30,6 +30,9 @@ public class Message extends BaseEntity<Long> {
     @Column(name = "sent_at")
     private LocalDateTime sentAt;
 
+    @Column(name = "sender_name")
+    private String senderName;
+
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<MessageStatus> messageStatuses = new ArrayList<>();

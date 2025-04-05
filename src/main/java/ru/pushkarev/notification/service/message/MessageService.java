@@ -3,14 +3,12 @@ package ru.pushkarev.notification.service.message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.pushkarev.notification.dto.ChatsDto;
 import ru.pushkarev.notification.dto.MessageDto;
 import ru.pushkarev.notification.dto.MessageTransfer;
 import ru.pushkarev.notification.dto.UserDto;
 import ru.pushkarev.notification.entity.*;
-import ru.pushkarev.notification.repository.ChatParticipantRepository;
-import ru.pushkarev.notification.repository.ChatRepository;
-import ru.pushkarev.notification.repository.MessageRepository;
-import ru.pushkarev.notification.repository.MessageStatusRepository;
+import ru.pushkarev.notification.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -27,17 +25,19 @@ public class MessageService {
     private final MessageStatusRepository messageStatusRepository;
     private final ChatRepository chatRepository;
     private final MessageCacheService redisUserService;
+    private final UserRepository userRepository;
 
     public MessageService(MessageRepository messageRepository,
                           ChatParticipantRepository chatParticipantRepository,
                           MessageStatusRepository messageStatusRepository,
                           ChatRepository chatRepository,
-                          MessageCacheService redisUserService) {
+                          MessageCacheService redisUserService, UserRepository userRepository) {
         this.messageRepository = messageRepository;
         this.chatParticipantRepository = chatParticipantRepository;
         this.messageStatusRepository = messageStatusRepository;
         this.chatRepository = chatRepository;
         this.redisUserService = redisUserService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -48,11 +48,15 @@ public class MessageService {
         Chat chat = chatRepository.findById(messageDto.getChatId())
                 .orElseThrow(() -> new IllegalArgumentException("Chat not found"));
 
+        Users sender = userRepository.findById(messageDto.getSenderId())
+                .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
+
         Message message = new Message();
         message.setChat(chat);
         message.setSenderId(messageDto.getSenderId());
         message.setContent(messageDto.getContent());
         message.setSentAt(LocalDateTime.now());
+        message.setSenderName(sender.getUsername());
 
         message = messageRepository.save(message);
 
@@ -145,6 +149,12 @@ public class MessageService {
         participant.setJoinedAt(LocalDateTime.now());
 
         chatParticipantRepository.save(participant);
+    }
+
+    public List<ChatsDto> getChats() {
+      return chatRepository.findAll().stream()
+               .map(chat -> new ChatsDto(chat.getId(), chat.getType()))
+               .collect(Collectors.toList());
     }
 
 }

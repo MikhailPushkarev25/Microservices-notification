@@ -10,5 +10,6 @@
     <include file="/db/exchange/20250330_create_table_messages.xml"/>
     <include file="/db/exchange/20250330_create_table_message_statuses.xml"/>
     <include file="/db/exchange/20250330_create_table_attachments.xml"/>
+    <include file="/db/exchange/20250406_add_column_in_message.xml"/>
 
 </databaseChangeLog>
