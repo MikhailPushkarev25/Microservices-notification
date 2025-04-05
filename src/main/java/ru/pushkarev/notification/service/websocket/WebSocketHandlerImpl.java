@@ -43,7 +43,7 @@ public class WebSocketHandlerImpl extends TextWebSocketHandler implements WebSoc
     }
 
     @Override
-    public void onMessageReceived(Message message) {
+    public void onMessageReceived(MessageDto message) {
         try {
             String jsonMessage = objectMapper.writeValueAsString(message);
             for (WebSocketSession s : activeSessions.values()) {

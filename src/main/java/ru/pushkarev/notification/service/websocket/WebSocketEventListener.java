@@ -1,7 +1,8 @@
 package ru.pushkarev.notification.service.websocket;
 
+import ru.pushkarev.notification.dto.MessageDto;
 import ru.pushkarev.notification.entity.Message;
 
 public interface WebSocketEventListener {
-    void onMessageReceived(Message message);
+    void onMessageReceived(MessageDto message);
 }

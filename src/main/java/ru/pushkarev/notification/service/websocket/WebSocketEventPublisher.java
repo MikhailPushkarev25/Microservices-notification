@@ -2,6 +2,7 @@ package ru.pushkarev.notification.service.websocket;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.pushkarev.notification.dto.MessageDto;
 import ru.pushkarev.notification.entity.Message;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class WebSocketEventPublisher {
         listeners.add(listener);
     }
 
-    public void publish(Message message) {
+    public void publish(MessageDto message) {
         for (WebSocketEventListener listener : listeners) {
             listener.onMessageReceived(message);
         }
