@@ -11,7 +11,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import ru.pushkarev.notification.dto.MessageDto;
-import ru.pushkarev.notification.entity.Message;
 import ru.pushkarev.notification.enums.CommandType;
 import ru.pushkarev.notification.service.command.CommandExecutor;
 
@@ -59,7 +58,11 @@ public class WebSocketHandlerImpl extends TextWebSocketHandler implements WebSoc
         try {
             MessageDto messageDto = objectMapper.readValue(message.getPayload(), MessageDto.class);
 
-            commandExecutor.executeCommand(CommandType.SEND_MESSAGE, messageDto);
+            if ("typing".equals(messageDto.getType())) {
+                publisher.publish(messageDto);
+            } else if ("message".equals(messageDto.getType())) {
+                commandExecutor.executeCommand(CommandType.SEND_MESSAGE, messageDto);
+            }
         } catch (Exception e) {
             log.error("Ошибка обработки WebSocket сообщения", e);
             sendError(session);

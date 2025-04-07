@@ -1,5 +1,6 @@
 package ru.pushkarev.notification.service.command;
 
+import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Service;
 import ru.pushkarev.notification.annotation.CommandTypeMapping;
 import ru.pushkarev.notification.enums.CommandType;
@@ -31,11 +32,12 @@ public class CommandExecutor {
     }
 
     private CommandType getCommandType(Command<?, ?> command) {
-        CommandTypeMapping annotation = command.getClass().getAnnotation(CommandTypeMapping.class);
+        Class<?> targetClass = AopUtils.getTargetClass(command);
+        CommandTypeMapping annotation = targetClass.getAnnotation(CommandTypeMapping.class);
         if (annotation != null) {
             return annotation.value();
         }
-        throw new IllegalArgumentException("Unknown command class: " + command.getClass());
+        throw new IllegalArgumentException("Unknown command class: " + targetClass);
     }
 }
 
