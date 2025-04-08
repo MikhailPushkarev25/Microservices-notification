@@ -2,9 +2,7 @@ package ru.pushkarev.notification.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.pushkarev.notification.dto.ChatsDto;
-import ru.pushkarev.notification.dto.CreateChatRequest;
-import ru.pushkarev.notification.dto.UserDto;
+import ru.pushkarev.notification.dto.*;
 import ru.pushkarev.notification.entity.Message;
 import ru.pushkarev.notification.enums.CommandType;
 import ru.pushkarev.notification.service.command.CommandExecutor;
@@ -47,6 +45,21 @@ public class ChatController {
     public ResponseEntity<String> markAsRead(@PathVariable Long chatId, @PathVariable Long userId) {
         executor.executeCommand(CommandType.MARK_AS_READ, new UserDto(chatId, userId));
         return ResponseEntity.ok("Messages marked as read");
+    }
+
+    @PutMapping("/{id}/description")
+    public ResponseEntity<ChatsDto> updateChatDescription(@PathVariable Long id, @RequestParam String description) {
+        return executor.executeCommand(CommandType.UPDATE_CHAT_DESCRIPTION, new UpdateChatDescDto(id, description));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteChat(@PathVariable Long id) {
+        executor.executeCommand(CommandType.DELETE_CHAT, id);
+    }
+
+    @PostMapping("/{id}/invite")
+    public void inviteUser(@PathVariable Long id, @RequestBody InviteRequest request) {
+        executor.executeCommand(CommandType.INVITE_USER, new UserDto(id, request.getUserId()));
     }
 }
 

@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatsDto {
-
-    private Long id;
-    private String description;
-    private String type;
+public class UpdateChatDescDto {
+    private Long chatId;
+    private String newDescription;
 }

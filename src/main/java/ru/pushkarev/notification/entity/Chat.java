@@ -22,6 +22,9 @@ public class Chat extends BaseEntity<Long> {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "description")
+    private String description;
+
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ChatParticipant> participants = new ArrayList<>();

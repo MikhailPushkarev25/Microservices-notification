@@ -48,26 +48,56 @@ public class SendMessageCommand implements Command<MessageDto, Void> {
     @Override
     @Transactional
     public Void execute(MessageDto messageDto) {
-        log.info("jobs command SendMessageCommand");
+        log.info("Executing SendMessageCommand");
+
+        // Получаем Chat и User
+        Chat chat = getChat(messageDto.getChatId());
+        Users user = getUser(messageDto.getSenderId());
+
+        // Проверяем и добавляем участника, если нужно
+        addParticipantIfNeeded(chat, user, messageDto.getSenderId());
+
+        // Отправляем сообщение
         Message message = sendMessage(messageDto);
         messageDto.setSenderName(message.getSenderName());
-        publisher.publish(messageDto);
+
+        // Рассылаем сообщение всем участникам
+        sendMessageToParticipants(messageDto);
+
         return null;
     }
 
-    /**
-     * 3. Отправить сообщение
-     */
-    public Message sendMessage(MessageDto messageDto) {
-        Instant instant = Instant.parse(messageDto.getTimestamp());
-        LocalDateTime sentAt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-
-        Chat chat = chatRepository.findById(messageDto.getChatId())
+    private Chat getChat(Long chatId) {
+        return chatRepository.findById(chatId)
                 .orElseThrow(() -> new IllegalArgumentException("Chat not found"));
+    }
 
-        Users sender = userRepository.findById(messageDto.getSenderId())
+    private Users getUser(Long userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
+    }
 
+    private void addParticipantIfNeeded(Chat chat, Users user, Long senderId) {
+        boolean exists = chatParticipantRepository.existsByChatIdAndUserId(chat.getId(), senderId);
+        if (!exists) {
+            ChatParticipant participant = new ChatParticipant();
+            participant.setChat(chat);  // Используем объект Chat
+            participant.setUserId(senderId);  // Используем userId
+            participant.setJoinedAt(LocalDateTime.now()); // Определяем момент добавления
+            chatParticipantRepository.save(participant);
+
+            log.info("Automatically added participant to chat: userId={}, chatId={}", senderId, chat.getId());
+        }
+    }
+
+    private Message sendMessage(MessageDto messageDto) {
+        LocalDateTime sentAt = parseTimestamp(messageDto.getTimestamp());
+
+        // Получаем Chat и User
+        Chat chat = getChat(messageDto.getChatId());
+        Users sender = getUser(messageDto.getSenderId());
+
+        // Создаём и сохраняем сообщение
         Message message = new Message();
         message.setChat(chat);
         message.setSenderId(messageDto.getSenderId());
@@ -77,12 +107,24 @@ public class SendMessageCommand implements Command<MessageDto, Void> {
 
         message = messageRepository.save(message);
 
+        // Кэшируем сообщение
         redisUserService.cacheMessage(messageDto.getChatId(), message);
 
-        // Обновить статусы сообщений (изначально "sent")
-        List<ChatParticipant> participants = chatParticipantRepository.findByChatId(messageDto.getChatId());
+        // Обновляем статусы сообщений
+        updateMessageStatus(message, messageDto.getSenderId());
+
+        return message;
+    }
+
+    private LocalDateTime parseTimestamp(String timestamp) {
+        Instant instant = Instant.parse(timestamp);
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    }
+
+    private void updateMessageStatus(Message message, Long senderId) {
+        List<ChatParticipant> participants = chatParticipantRepository.findByChatId(message.getChat().getId());
         for (ChatParticipant participant : participants) {
-            if (!participant.getUserId().equals(messageDto.getSenderId())) {
+            if (!participant.getUserId().equals(senderId)) {
                 MessageStatus status = new MessageStatus();
                 status.setMessage(message);
                 status.setUserId(participant.getUserId());
@@ -91,7 +133,26 @@ public class SendMessageCommand implements Command<MessageDto, Void> {
                 messageStatusRepository.save(status);
             }
         }
+    }
 
-        return message;
+    private void sendMessageToParticipants(MessageDto messageDto) {
+        List<ChatParticipant> participants = chatParticipantRepository.findByChatId(messageDto.getChatId());
+        for (ChatParticipant participant : participants) {
+            MessageDto copy = createMessageDtoForParticipant(participant, messageDto);
+            publisher.publish(copy);
+        }
+    }
+
+    private MessageDto createMessageDtoForParticipant(ChatParticipant participant, MessageDto messageDto) {
+        return MessageDto.builder()
+                .userId(participant.getUserId())
+                .chatId(messageDto.getChatId())
+                .content(messageDto.getContent())
+                .senderId(messageDto.getSenderId())
+                .senderName(messageDto.getSenderName())
+                .timestamp(messageDto.getTimestamp())
+                .type("message")
+                .build();
     }
 }
+

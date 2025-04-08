@@ -6,5 +6,8 @@ public enum CommandType {
     MARK_AS_READ,
     SEND_MESSAGE,
     GET_MESSAGES,
-    CHATS
+    CHATS,
+    UPDATE_CHAT_DESCRIPTION,
+    DELETE_CHAT,
+    INVITE_USER
 }

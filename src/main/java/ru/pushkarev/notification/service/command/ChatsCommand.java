@@ -31,7 +31,7 @@ public class ChatsCommand implements Command<Void, List<ChatsDto>> {
 
     public List<ChatsDto> getChats() {
         return chatRepository.findAll().stream()
-                .map(chat -> new ChatsDto(chat.getId(), chat.getType()))
+                .map(chat -> new ChatsDto(chat.getId(), chat.getType(), chat.getDescription()))
                 .collect(Collectors.toList());
     }
 }

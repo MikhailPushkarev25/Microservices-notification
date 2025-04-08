@@ -15,6 +15,7 @@ import ru.pushkarev.notification.enums.CommandType;
 import ru.pushkarev.notification.service.command.CommandExecutor;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,7 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketHandlerImpl extends TextWebSocketHandler implements WebSocketEventListener {
 
     private final ObjectMapper objectMapper;
-    private final Map<String, WebSocketSession> activeSessions = new ConcurrentHashMap<>();
+
+    @Autowired
+    private WebSocketSessionManager sessionManager;
 
     @Autowired
     private CommandExecutor commandExecutor;
@@ -45,13 +48,18 @@ public class WebSocketHandlerImpl extends TextWebSocketHandler implements WebSoc
     public void onMessageReceived(MessageDto message) {
         try {
             String jsonMessage = objectMapper.writeValueAsString(message);
-            for (WebSocketSession s : activeSessions.values()) {
-                s.sendMessage(new TextMessage(jsonMessage));
+
+            // Шлём всем userId, для кого предназначено сообщение
+            WebSocketSession session = sessionManager.getSession(message.getUserId());
+            if (session != null && session.isOpen()) {
+                session.sendMessage(new TextMessage(jsonMessage));
             }
+
         } catch (IOException e) {
             log.error("Ошибка отправки WebSocket сообщения", e);
         }
     }
+
 
     @Override
     protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) {
@@ -63,12 +71,12 @@ public class WebSocketHandlerImpl extends TextWebSocketHandler implements WebSoc
             } else if ("message".equals(messageDto.getType())) {
                 commandExecutor.executeCommand(CommandType.SEND_MESSAGE, messageDto);
             }
+
         } catch (Exception e) {
             log.error("Ошибка обработки WebSocket сообщения", e);
             sendError(session);
         }
     }
-
 
     private void sendError(WebSocketSession session) {
         try {
@@ -80,15 +88,40 @@ public class WebSocketHandlerImpl extends TextWebSocketHandler implements WebSoc
 
     @Override
     public void afterConnectionEstablished(@NonNull WebSocketSession session) {
-        activeSessions.put(session.getId(), session);
-        log.info("WebSocket подключен: {}", session.getId());
+        String userId = getUserIdFromSession(session);
+        if (userId != null) {
+            // Сохраняем сессию по userId
+            sessionManager.registerSession(Long.parseLong(userId), session);
+            log.info("WebSocket подключен: userId={}, session={}", userId, session.getId());
+        } else {
+            log.warn("WebSocket подключен без userId, session={}", session.getId());
+        }
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, @NonNull CloseStatus status) {
-        activeSessions.remove(session.getId());
-        log.info("WebSocket отключен: {}", session.getId());
+    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
+        String userId = getUserIdFromSession(session);
+        if (userId != null) {
+            // Удаляем сессию по userId
+            sessionManager.removeSession(Long.parseLong(userId));
+            log.info("WebSocket отключен: userId={}, session={}", userId, session.getId());
+        }
+    }
+
+    private String getUserIdFromSession(WebSocketSession session) {
+        try {
+            URI uri = session.getUri();
+            if (uri.getQuery() != null) {
+                String[] params = uri.getQuery().split("&");
+                for (String param : params) {
+                    if (param.startsWith("userId=")) {
+                        return param.split("=")[1];
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("Ошибка при извлечении userId из URI", e);
+        }
+        return null;
     }
 }
-
-
